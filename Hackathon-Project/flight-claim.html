@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyClaim — Flight Delay Compensation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="flight-claim.css">
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav>
+  <div class="nav-logo">Sky<span>Claim</span></div>
+  <ul class="nav-links">
+    <li><a href="#claim" onclick="event.preventDefault();handleFileClaimClick()">File Claim</a></li>
+    <li><a href="#eligibility" onclick="event.preventDefault();document.getElementById('eligibility').scrollIntoView({behavior:'smooth'})">Eligibility</a></li>
+    <li><a href="#status" onclick="event.preventDefault();document.getElementById('status').scrollIntoView({behavior:'smooth'})">Track</a></li>
+  </ul>
+  <button class="nav-cta" onclick="handleFileClaimClick()">File a Claim</button>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✈ EU261 / DOT Compensation Portal</div>
+    <h1> Flight Delay Compensation Claim </h1>
+    <p>Submit and track EU261/DOT compensation claims for delayed or cancelled flights — with document upload, eligibility checking, and real-time status tracking.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="handleFileClaimClick()">Start My Claim →</button>
+      <button class="btn-outline" onclick="document.getElementById('eligibility').scrollIntoView({behavior:'smooth'})">Check Eligibility</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">€600</div>
+        <div class="stat-label">Max Compensation</div>
+      </div>
+    
+      <div class="stat-item">
+        <div class="stat-num">48h</div>
+        <div class="stat-label">Avg Processing</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <h2 class="section-title">Why Choose <em>SkyClaim</em></h2>
+  <p class="section-sub">A complete flight delay compensation experience with smart eligibility, secure uploads, and clear claim status tracking.</p>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <span>✈️</span>
+      <h3>Fast Claim Filing</h3>
+      <p>Submit all flight details, supporting documents, and delay information in minutes.</p>
+    </div>
+    <div class="feature-card">
+      <span>📄</span>
+      <h3>Smart Eligibility Check</h3>
+      <p>See immediately if your flight qualifies under EU261 or DOT compensation rules.</p>
+    </div>
+    <div class="feature-card">
+      <span>🔒</span>
+      <h3>Secure Document Upload</h3>
+      <p>Upload boarding passes, tickets, and delay notices safely with instant validation.</p>
+    </div>
+    <div class="feature-card">
+      <span>📊</span>
+      <h3>Admin Review Dashboard</h3>
+      <p>Monitor claim progress, approve requests, and keep passengers informed with one dashboard.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── CLAIM FORM ── -->
+<section id="claim" class="form-section">
+  <h2 class="section-title">Submit Your <em>Claim</em></h2>
+  <p class="section-sub">Fill in the details below. All fields are validated in real time.</p>
+
+  <div class="form-container">
+    <div class="tab-bar">
+      <div class="tab active" onclick="switchTab(this,'tab-flight')">✈ Flight Details</div>
+      <div class="tab" onclick="switchTab(this,'tab-docs')">📎 Upload Documents</div>
+      <div class="tab" onclick="switchTab(this,'tab-review')">✅ Review & Submit</div>
+    </div>
+
+    <!-- FLIGHT DETAILS TAB -->
+    <div class="tab-panel active" id="tab-flight">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Passenger Full Name *</label>
+          <input type="text" id="passengerName" placeholder="e.g. Gnaneshwar Reddy" oninput="validateField(this)">
+          <span class="error-msg" id="passengerNameErr"></span>
+        </div>
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="email" placeholder="you@example.com" oninput="validateField(this)">
+          <span class="error-msg" id="emailErr"></span>
+        </div>
+        <div class="form-group">
+          <label>Flight Number *</label>
+          <input type="text" id="flightNo" placeholder="e.g. AI-204" oninput="validateField(this)">
+          <span class="error-msg" id="flightNoErr"></span>
+        </div>
+        <div class="form-group">
+          <label>Departure Date *</label>
+          <input type="date" id="depDate">
+        </div>
+        <div class="form-group">
+          <label>Departure Airport *</label>
+          <input type="text" id="depAirport" placeholder="e.g. HYD — Hyderabad">
+        </div>
+        <div class="form-group">
+          <label>Arrival Airport *</label>
+          <input type="text" id="arrAirport" placeholder="e.g. DEL — Delhi">
+        </div>
+        <div class="form-group">
+          <label>Delay Duration *</label>
+          <select id="delayHours">
+            <option value="">Select delay duration</option>
+            <option value="2">2–3 hours</option>
+            <option value="3">3–4 hours</option>
+            <option value="4">4+ hours</option>
+            <option value="cancel">Flight Cancelled</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Reason Given by Airline</label>
+          <select id="delayReason">
+            <option value="">Select reason</option>
+            <option value="weather">Weather / Extraordinary Circumstances</option>
+            <option value="technical">Technical / Mechanical Issue</option>
+            <option value="crew">Crew Scheduling</option>
+            <option value="operational">Operational Delay</option>
+            <option value="other">Other / Not Told</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Additional Details</label>
+          <textarea id="details" placeholder="Describe what happened — missed connections, expenses incurred, etc."></textarea>
+        </div>
+      </div>
+      <button class="btn-primary" style="margin-top:1.5rem" onclick="switchTabById('tab-docs')">Next: Upload Documents →</button>
+    </div>
+
+    <!-- DOCUMENT UPLOAD TAB -->
+    <div class="tab-panel" id="tab-docs">
+      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:1.5rem;">Attach supporting documents. Accepted: PDF, JPG, PNG (max 5MB each).</p>
+      <div class="upload-zone" id="uploadZone" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+        <input type="file" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="handleFiles(this.files)">
+        <div class="upload-icon">📂</div>
+        <h4>Drag & drop files here</h4>
+        <p>or click to browse — boarding pass, delay certificate, ticket</p>
+      </div>
+      <div class="file-list" id="fileList"></div>
+      <div style="margin-top:2rem;display:flex;gap:1rem;">
+        <button class="btn-outline" onclick="switchTabById('tab-flight')">← Back</button>
+        <button class="btn-primary" onclick="switchTabById('tab-review')">Next: Review →</button>
+      </div>
+    </div>
+
+    <!-- REVIEW & SUBMIT TAB -->
+    <div class="tab-panel" id="tab-review">
+      <div id="reviewContent" style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;">
+        <div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.5rem;">Review your submission</div>
+        <div id="reviewData" style="font-size:0.9rem;line-height:1.8;color:var(--text);">Go back to Step 1 to fill in your details first.</div>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+        <button class="btn-outline" onclick="switchTabById('tab-docs')">← Back</button>
+        <button class="btn-primary" onclick="submitClaim()">Submit Claim ✓</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ELIGIBILITY CHECKER ── -->
+<section id="eligibility" class="checker-section">
+  <h2 class="section-title">Eligibility <em>Checker</em></h2>
+  <p class="section-sub">Our rule-based engine evaluates EU261/DOT criteria to instantly determine your compensation amount.</p>
+
+  <div class="checker-card">
+    <div class="checker-grid">
+      <div class="form-group">
+        <label>Flight Route</label>
+        <select id="routeType">
+          <option value="">Select route type</option>
+          <option value="eu">EU departure (any airline)</option>
+          <option value="eu_arr">EU arrival (EU carrier)</option>
+          <option value="domestic">Domestic (DOT rules)</option>
+          <option value="intl">International non-EU</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Delay / Disruption</label>
+        <select id="delayType">
+          <option value="">Select disruption</option>
+          <option value="2h">2–3 hr delay</option>
+          <option value="3h">3–4 hr delay</option>
+          <option value="4h">4+ hr delay</option>
+          <option value="cancel">Cancellation</option>
+          <option value="denied">Denied Boarding</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Flight Distance</label>
+        <select id="distance">
+          <option value="">Select distance</option>
+          <option value="1500">Under 1,500 km</option>
+          <option value="3500">1,500–3,500 km</option>
+          <option value="3500p">Over 3,500 km</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Airline Responsibility</label>
+        <select id="responsibility">
+          <option value="">Was it airline's fault?</option>
+          <option value="yes">Yes — Technical / Operational</option>
+          <option value="no">No — Weather / Extraordinary</option>
+          <option value="unsure">Unsure</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-primary" style="margin-top:1.25rem" onclick="checkEligibility()">Check My Eligibility →</button>
+    <div class="result-box" id="eligResult">
+      <div class="result-title" id="eligTitle">✓ You Are Eligible!</div>
+      <div class="result-amount" id="eligAmount">€250</div>
+      <div class="result-note" id="eligNote">Under EU261/2004, you are entitled to compensation for this flight disruption.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATUS TRACKER ── -->
+<section id="status" class="tracker-section">
+  <h2 class="section-title">Track Your <em>Claim Status</em></h2>
+  <p class="section-sub">Enter your Claim ID to see the real-time status of your submission.</p>
+
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;max-width:860px;margin-top:2rem;">
+    <div style="display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+      <input type="text" id="trackId" placeholder="Enter Claim ID (e.g. CLM-2024-0042)"
+        style="background:var(--navy);border:1.5px solid var(--border);color:var(--text);padding:0.7rem 1rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;flex:1;outline:none;">
+      <button class="btn-primary" onclick="trackClaim()">Track →</button>
+    </div>
+    <div id="trackerResult" style="display:none">
+      <div style="margin-bottom:1rem;padding:0.75rem 1rem;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.2);border-radius:8px;font-size:0.875rem;color:var(--sky);">
+        📋 Claim <strong id="trackClaimId">CLM-2024-0042</strong> —
+        <span id="trackPassenger">Passenger</span> —
+        Flight <strong id="trackFlight">AI-204</strong>
+      </div>
+      <div class="tracker-steps">
+        <div class="tracker-step done" id="step1">
+          <div class="step-circle">✓</div>
+          <div class="step-label">Submitted</div>
+        </div>
+        <div class="tracker-step done" id="step2">
+          <div class="step-circle">✓</div>
+          <div class="step-label">Verified</div>
+        </div>
+        <div class="tracker-step active" id="step3">
+          <div class="step-circle">⚡</div>
+          <div class="step-label">Under Review</div>
+        </div>
+        <div class="tracker-step" id="step4">
+          <div class="step-circle">4</div>
+          <div class="step-label">Decision</div>
+        </div>
+        <div class="tracker-step" id="step5">
+          <div class="step-circle">5</div>
+          <div class="step-label">Paid</div>
+        </div>
+      </div>
+      <div style="margin-top:1.5rem;padding:1rem;background:rgba(244,185,66,0.08);border:1px solid rgba(244,185,66,0.2);border-radius:8px;font-size:0.875rem;color:var(--gold);">
+        ⏱ Your claim is currently under admin review. Expected decision within 48 hours.
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  <div style="margin-top:2rem;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+    <div style="padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;">
+      <span style="font-weight:600;font-size:0.95rem;">Recent Claims</span>
+      <div style="display:flex;gap:0.5rem;">
+        <select style="background:var(--navy);border:1px solid var(--border);color:var(--text);padding:0.4rem 0.75rem;border-radius:6px;font-size:0.8rem;">
+          <option>All Status</option>
+          <option>Pending</option>
+          <option>Approved</option>
+          <option>Rejected</option>
+        </select>
+        <input type="text" placeholder="Search claim..."
+          style="background:var(--navy);border:1px solid var(--border);color:var(--text);padding:0.4rem 0.75rem;border-radius:6px;font-size:0.8rem;outline:none;">
+      </div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="claims-table">
+        <thead>
+          <tr>
+            <th>Claim ID</th>
+            <th>Passenger</th>
+            <th>Flight</th>
+            <th>Route</th>
+            <th>Delay</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="claimsBody">
+          <tr>
+            <td><span style="font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--sky)">CLM-0042</span></td>
+            <td>Gnaneshwar Reddy</td>
+            <td>AI-204</td>
+            <td>HYD → DEL</td>
+            <td>4h 20m</td>
+            <td style="color:var(--gold);font-weight:600">€250</td>
+            <td><span class="status-badge review">● Under Review</span></td>
+            <td>
+              <button class="action-btn approve" onclick="updateStatus(this,'approved')">Approve</button>
+              <button class="action-btn reject" onclick="updateStatus(this,'rejected')">Reject</button>
+            </td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--sky)">CLM-0041</span></td>
+            <td>Team Member 2</td>
+            <td>6E-512</td>
+            <td>BLR → BOM</td>
+            <td>3h 10m</td>
+            <td style="color:var(--gold);font-weight:600">€250</td>
+            <td><span class="status-badge approved">● Approved</span></td>
+            <td>
+              <button class="action-btn" onclick="viewDetails(this)">View</button>
+            </td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--sky)">CLM-0040</span></td>
+            <td>Priya Sharma</td>
+            <td>SG-101</td>
+            <td>DEL → LHR</td>
+            <td>Cancelled</td>
+            <td style="color:var(--gold);font-weight:600">€600</td>
+            <td><span class="status-badge pending">● Pending</span></td>
+            <td>
+              <button class="action-btn approve" onclick="updateStatus(this,'approved')">Approve</button>
+              <button class="action-btn reject" onclick="updateStatus(this,'rejected')">Reject</button>
+            </td>
+          </tr>
+          <tr>
+            <td><span style="font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--sky)">CLM-0039</span></td>
+            <td>Ravi Teja</td>
+            <td>UK-826</td>
+            <td>CCU → DXB</td>
+            <td>2h 45m</td>
+            <td style="color:var(--muted);font-weight:600">—</td>
+            <td><span class="status-badge rejected">● Rejected</span></td>
+            <td>
+              <button class="action-btn" onclick="viewDetails(this)">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="logo">SkyClaim</div>
+  <p>Flight Delay Compensation Portal · EU261 / DOT · Academic Project</p>
+</footer>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast"></div>
+
+<!-- Authentication Script -->
+<script>
+  // Check if user is logged in
+  function isUserLoggedIn() {
+    return localStorage.getItem('skyclaim_token') && localStorage.getItem('skyclaim_user');
+  }
+  
+  // Handle "File a Claim" button click
+  function handleFileClaimClick() {
+    if (!isUserLoggedIn()) {
+      // User not logged in - redirect to login page
+      window.location.href = 'login.html';
+      return;
+    }
+    // User is logged in - scroll to claim form
+    document.getElementById('claim').scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+
+<script src="flight-claim.js"></script>
+</body>
+</html>
